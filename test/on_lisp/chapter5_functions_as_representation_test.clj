@@ -1,4 +1,4 @@
-(ns on_lisp.chapter5_functions_as_representation_test
+(ns on_lisp.chapter5-functions-as-representation-test
   (:require [on-lisp.chapter5-functions-as-representations :refer :all]
             [midje.sweet :refer :all]))
 
