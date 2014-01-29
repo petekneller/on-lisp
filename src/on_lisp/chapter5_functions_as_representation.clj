@@ -1,6 +1,7 @@
 (ns on-lisp.chapter5-functions-as-representation)
 
 (defstruct node :contents :yes :no)
+(defn answer-node? [node] (nil? (:yes node)))
 
 (def ^:dynamic *nodes* (hash-map))
 
@@ -13,20 +14,25 @@
                      :no no))))
 
 (defn create-questions []
-  (do
-    (defnode 'people "Is the person a man?" 'male 'female)
-    (defnode 'male "Is he living?" 'liveman 'deadman)
-    (defnode 'deadman "Was he American?" 'us 'them)
-    (defnode 'us "Is he on a coin?" 'coin 'cidence)
-    (defnode 'coin "Is the coin a penny?" 'penny 'coins)
-    (defnode 'penny 'lincoln)))
+  (doall (map #(apply defnode %) [
+    ['people "Is the person a man?" 'male 'female]
+    ['male "Is he living?" 'liveman 'deadman]
+    ['deadman "Was he American?" 'us 'them]
+    ['us "Is he on a coin?" 'coin 'cidence]
+    ['coin "Is the coin a penny?" 'penny 'coins]
+    ['penny 'lincoln]])))
 
 (defn run-node [name]
   (let [node (get *nodes* name)]
-    (if (nil? (:yes node))
-      (:contents node)
+    (if (answer-node? node)
+      (println (:contents node))
       (do
         (println (:contents node))
         (case (read-line)
           ("yes" "y") (run-node (:yes node))
           ("no" "n") (run-node (:no node)))))))
+
+(defn -main []
+  (do
+    (create-questions)
+    (run-node 'people)))
