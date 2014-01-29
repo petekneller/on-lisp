@@ -23,10 +23,10 @@
 
 (defn run-node [name]
   (let [node (get *nodes* name)]
-    (if (:yes node)
+    (if (nil? (:yes node))
+      (:contents node)
       (do
         (println (:contents node))
         (case (read-line)
-          "yes" (run-node (:yes node))
-          "no" (run-node (:no node))))
-      (:contents node))))
+          ("yes" "y") (run-node (:yes node))
+          ("no" "n") (run-node (:no node)))))))
