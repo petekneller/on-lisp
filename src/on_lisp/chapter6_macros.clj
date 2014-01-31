@@ -62,6 +62,32 @@
 ; so the above is the runtime equivalent of a macro call; although the quotes on the integers aren't really necessary
 
 
+; move these somewhere else
+; destructuring - vectors
+(let [[a b] []]
+  {:A a :B b}) ; => {:A nil, :B nil} => can always destructure vectors even when there aren't enough elems
+(let [[a b :as all] []]
+  {:A a :B b :ALL all}) ; => {:A nil, :B nil, :ALL []} => :as is the equiv of an @ binding in scala/haskell pattern matching
+(let [[a b & rest :as all] []]
+  {:A a :B b :ALL all :REST rest}) ; => {:A nil, :B nil, :ALL [], :REST nil}
+(let [[a b & rest :as all] [1]]
+  {:A a :B b :ALL all :REST rest}) ; => {:A 1, :B nil, :ALL [1], :REST nil}
+(let [[a b & rest :as all] [1 2]]
+  {:A a :B b :ALL all :REST rest}) ; => {:A 1, :B 2, :ALL [1 2], :REST nil}
+(let [[a b & rest :as all] [1 2 3]]
+  {:A a :B b :ALL all :REST rest}) ; => {:A 1, :B 2, :ALL [1 2 3], :REST (3)}
+; destructuring - maps
+(let [{a :a b :b} {}]
+  [:A a :B b]) ; => [:A nil :B nil] => same goes for missing keys when destructuring maps
+(let [{a :a b :b} {:a 2}]
+  [:A a :B b]) ; => [:A 2 :B nil]
+(let [{:keys [a b]} {:a 2}]
+  [:A a :B b]) ; => [:A 2 :B nil]
+(let [{:keys [a b] :as all} {:a 2}]
+  [:A a :B b :ALL all]) ; => [:A 2 :B nil :ALL {:a 2}]
+(let [{:keys [a b] :or {b 3} :as all} {:a 2}]
+  [:A a :B b :ALL all]) ; => [:A 2 :B 3 :ALL {:a 2}]
+
 
 (defmacro macexp [form]
   `(pprint (macroexpand-1 form)))
