@@ -57,9 +57,9 @@
 (defn my-str-f [& args]
   `(str "prefix-" ~@args "-suffix"))
 (my-str-f 1 (+ 1 2) 5) ; => (clojure.core/str "prefix-" 1 3 5 "-suffix")
-(my-str-f 1 '(+ 1 2) 5) ; => (clojure.core/str "prefix-" 1 (+ 1 2) 5 "-suffix")
-(eval (my-str-f 1 '(+ 1 2) 5)) ; => "prefix-135-suffix"
-; so the above is the runtime equivalent of a macro call
+(my-str-f '1 '(+ 1 2) '5) ; => (clojure.core/str "prefix-" 1 (+ 1 2) 5 "-suffix")
+(eval (my-str-f '1 '(+ 1 2) '5)) ; => "prefix-135-suffix"
+; so the above is the runtime equivalent of a macro call; although the quotes on the integers aren't really necessary
 
 
 
