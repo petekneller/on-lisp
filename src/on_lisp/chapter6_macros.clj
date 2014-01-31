@@ -49,6 +49,18 @@
 (to-str3 1 2) ; => "12"
 (macroexpand-1 (to-str3 1 2)) ; => (clojure.core/str 1 2)
 
+; can I mimic the compile-time expansion of macros at runtime?
+(defmacro my-str-m [& args]
+  `(str "prefix-" ~@args "-suffix"))
+(my-str-m 1 (+ 1 2) 5) ; => "prefix-135-suffix"
+(macroexpand-1 '(my-str-m 1 (+ 1 2) 5)) ; => (clojure.core/str "prefix-" 1 (+ 1 2) 5 "-suffix")
+(defn my-str-f [& args]
+  `(str "prefix-" ~@args "-suffix"))
+(my-str-f 1 (+ 1 2) 5) ; => (clojure.core/str "prefix-" 1 3 5 "-suffix")
+(my-str-f 1 '(+ 1 2) 5) ; => (clojure.core/str "prefix-" 1 (+ 1 2) 5 "-suffix")
+(eval (my-str-f 1 '(+ 1 2) 5)) ; => "prefix-135-suffix"
+; so the above is the runtime equivalent of a macro call
+
 
 
 (defmacro macexp [form]
