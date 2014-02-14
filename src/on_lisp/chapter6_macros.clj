@@ -1,5 +1,4 @@
-(ns on-lisp.chapter6-macros
-  (:require [clojure.core :refer :all]))
+(ns on-lisp.chapter6-macros)
 
 
 (str "hello" "world") ; => helloworld
@@ -10,7 +9,7 @@
 '(str "hel" (str "lo" "wo") "rld") ; => (str hel (str lo wo) rld)
 `(str "hel" (str "lo" "wo") "rld") ; => (clojure.core/str hel (clojure.core/str lo wo) rld)
 ; quoting is of course necessary for literal lists
-(1 2 3) ; => ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
+;(1 2 3) ; => ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
 '(1 2 3) ; => (1 2 3)
 ''(1 2 3) ; => (quote (1 2 3))
 '''(1 2 3) ; => (quote (quote (1 2 3)))
@@ -21,7 +20,7 @@
 `(str "hel" ~(str "lo" "wo") "rld") ; => (clojure.core/str hel lowo rld)
 `~(str "hel" (str "lo" "wo") "rld") ; => helloworld
 ; unquoting a literal list is gonna break...
-`(str "hel" (str ~("lo" "wo")) "rld") ; => ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
+;`(str "hel" (str ~("lo" "wo")) "rld") ; => ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
 ; ... but not using splicing unquote
 `(str "hel" (str ~'("lo" "wo")) "rld") ; => (clojure.core/str hel (clojure.core/str (lo wo)) rld)
 `(str "hel" (str ~@'("lo" "wo")) "rld") ; => (clojure.core/str hel (clojure.core/str lo wo) rld)
