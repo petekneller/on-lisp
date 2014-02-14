@@ -2,16 +2,20 @@
 
 (defn- inc? [marker] (= :inc marker))
 
-(defn- extract-bindings-1 [bindings bound]
-  (if (or (nil? bindings) (empty? bindings))
+(defn- do-extract-bindings-1 [binding-forms bound]
+  (if (or (nil? binding-forms) (empty? binding-forms))
     bound
-    (let [[var init-form & rest-after-binding] bindings
+    (let [[var init-form & rest-after-binding] binding-forms
           [inc-marker inc-form & rest-after-inc-form] rest-after-binding
-          new-binding (if (inc? inc-marker)
-                        {:var var :init-form init-form :inc-form inc-form}
-                        {:var var :init-form init-form})
+          new-binding {:var var :init-form init-form :inc-form (if (inc? inc-marker) inc-form var)}
           rest (if (inc? inc-marker) rest-after-inc-form rest-after-binding)]
       (recur rest (conj bound new-binding)))))
 
-(defn do-extract-bindings [bindings]
-  (extract-bindings-1 bindings []))
+(defn- do-extract-bindings [binding-forms]
+  (do-extract-bindings-1 binding-forms []))
+
+(defn let-bindings [binding-forms]
+  (flatten (map #(vector (:var %) (:init-form %)) (do-extract-bindings binding-forms))))
+
+(defn inc-forms [binding-forms]
+  (map #(:inc-form %) (do-extract-bindings binding-forms)))
