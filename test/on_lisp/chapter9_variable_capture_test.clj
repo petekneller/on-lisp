@@ -28,4 +28,4 @@
 `(x# y#) ; => (x__1577__auto__ y__1578__auto__)
 `(~(gensym) ~(gensym)) ; => (G__1599 G__1600)
 
-(good-for [limit 1 5] (println limit)) ; now works
+; (good-for [limit 1 5] (println limit)) ; now works
