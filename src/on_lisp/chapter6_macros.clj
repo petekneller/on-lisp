@@ -20,7 +20,7 @@
 `(str "hel" ~(str "lo" "wo") "rld") ; => (clojure.core/str hel lowo rld)
 `~(str "hel" (str "lo" "wo") "rld") ; => helloworld
 ; unquoting a literal list is gonna break...
-;`(str "hel" (str ~("lo" "wo")) "rld") ; => ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
+;`(str "hel" (str ~("lo" "wo")) "rld") ; => ClassCastException java.lang.String cannot be cast to clojure.lang.IFn
 ; ... but not using splicing unquote
 `(str "hel" (str ~'("lo" "wo")) "rld") ; => (clojure.core/str hel (clojure.core/str (lo wo)) rld)
 `(str "hel" (str ~@'("lo" "wo")) "rld") ; => (clojure.core/str hel (clojure.core/str lo wo) rld)

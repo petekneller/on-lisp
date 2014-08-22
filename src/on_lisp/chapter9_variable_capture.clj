@@ -40,7 +40,7 @@
 
 ; 9.6 Avoiding capture with gensyms
 
-(defmacro good-for [[var start stop] & body] ; wrong
+(defmacro good-for [[var start stop] & body] ; right
   `(lisp-do [~var ~start :inc (+ 1 ~var)
              limit# ~stop]
             (> ~var limit#)
