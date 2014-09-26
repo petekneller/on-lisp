@@ -17,6 +17,17 @@
         (address "Mike") => "Mike's house"
         (town "Mike's house") => "Sydney"))
 
+; is the above equiv to the threading macro?
+(fact (-> (owner "Porsche")
+          (address)
+          (town)
+          (nil?)) => false
+      (provided
+        (owner "Porsche") => "Mike"
+        (address "Mike") => "Mike's house"
+        (town "Mike's house") => "Sydney"))
+; interesting
+
 (fact (acond
         (count "Fooey") (+ 1 it)
         :else 0) => 6)

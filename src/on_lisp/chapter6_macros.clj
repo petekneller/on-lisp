@@ -33,7 +33,7 @@
 (macroexpand-1 (vector 1 2)) ; => [1 2]
 (macroexpand-1 '(vector 1 2)) ; => (vector 1 2)
 ; macroexpand-1 ignores forms that dont evaluate to a macro call
-(macroexpand-1 '(vector 1 2)) ; => [list 1 2]
+(macroexpand-1 '(vector 1 2)) ; => (vector 1 2)
 (defmacro to-str [form] `(str ~form))
 (to-str (vector 1 2)) ; => "[1 2]"
 (macroexpand-1 '(to-str (vector 1 2))) ; => (clojure.core/str (vector 1 2))
