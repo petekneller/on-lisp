@@ -1,4 +1,6 @@
-(ns on-lisp.chapter18-destructuring-matching)
+(ns on-lisp.chapter18b-destructuring-matching)
+
+(declare form-matcher)
 
 (defn vector-matcher [form arg]
   (let [pairs (map vector form arg)]
@@ -11,6 +13,6 @@
     (and (symbol? form) (.startsWith (name form) "?")) `true
     :else `(= ~arg ~form)))
 
-(defmacro match [forms arg]
+(defmacro match? [forms arg]
   (let [one (first forms)]
     (form-matcher one (eval arg))))
