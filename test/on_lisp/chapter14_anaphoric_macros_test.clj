@@ -8,6 +8,8 @@
 (fact (aif (big-long-calculation) (> it 2)) => true
       (provided (big-long-calculation) => 3))
 
+(fact (aif false (> it 2)) => nil)
+
 (fact (awhen (> (big-long-calculation) 4) "hoorah") => nil
       (provided (big-long-calculation) => 3))
 
