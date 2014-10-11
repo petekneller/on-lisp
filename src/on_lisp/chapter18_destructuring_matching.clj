@@ -4,19 +4,29 @@
 (defn- varsym? [x]
   (and (symbol? x) (.startsWith (name x) "?")))
 
-(defn- binding [x binds]
-  (let [recbind (fn recbind [x binds]
-                 (aif (get x binds)
-                      (or (recbind (rest it) binds) it)))]
-    (let [b (recbind x binds)]
-      (rest b))))
+(defn- zip [& colls]
+  (apply map vector colls))
 
-(defn match? [l r & binds]
-  (acond
-    (or (= l r) (= l '_) (= r '_)) binds
-    (binding l binds) (match? it r binds)
-    (binding r binds) (match? l it binds)
-    (varsym? l) (conj [l r] binds)
-    (varsym? r) (conj [r l] binds)
-    (and (seq l) (seq r) (match? (first l) (first r) binds)) (match? (rest l) (rest r) it)
-    :else []))
+(defn- pair-match? [pair tail binds]
+  (let [l (first pair)
+        r (second pair)
+        _ (println pair)]
+    (acond
+      (nil? pair) binds
+      (or (= l r) (= l '_) (= r '_)) (recur (first tail) (rest tail) binds)
+      (get binds l) (recur [it r] tail binds)
+      (get binds r) (recur [l it] tail binds)
+      (varsym? l) (recur (first tail) (rest tail) (assoc binds l r))
+      (varsym? r) (recur (first tail) (rest tail) (assoc binds r l)))))
+
+(defn match? [l r]
+  (if (not (= (count l) (count r)))
+    nil
+    (let [pairs (zip l r)]
+      (pair-match? (first pairs) (rest pairs) {}))))
+
+;(defmacro if-match [pat seq then & else]
+;  `(aif (match? ~pat ~seq)
+;        (let (vec it)
+;          ~then)
+;     ~else))
