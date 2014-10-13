@@ -1,6 +1,6 @@
-(ns on-lisp.chapter19-query-compiler-test
+(ns on-lisp.chapter19-query-interpreter-test
   (:require [midje.sweet :as m]
-            [on-lisp.chapter19-query-compiler :refer :all]))
+            [on-lisp.chapter19-query-interpreter :refer :all]))
 
 (m/fact "basic query functions"
         (clear-db)

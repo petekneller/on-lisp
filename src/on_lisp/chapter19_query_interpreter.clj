@@ -1,4 +1,4 @@
-(ns on-lisp.chapter19-query-compiler
+(ns on-lisp.chapter19-query-interpreter
   (:require [on-lisp.chapter18-destructuring-matching :refer :all]
             [on-lisp.chapter14-anaphoric-macros :refer :all]))
 
