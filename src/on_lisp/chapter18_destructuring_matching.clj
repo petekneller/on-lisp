@@ -9,8 +9,7 @@
 
 (defn- pair-match? [pair tail binds]
   (let [l (first pair)
-        r (second pair)
-        _ (println pair)]
+        r (second pair)]
     (acond
       (nil? pair) binds
       (or (= l r) (= l '_) (= r '_)) (recur (first tail) (rest tail) binds)
@@ -19,11 +18,13 @@
       (varsym? l) (recur (first tail) (rest tail) (assoc binds l r))
       (varsym? r) (recur (first tail) (rest tail) (assoc binds r l)))))
 
-(defn match? [l r]
-  (if (not (= (count l) (count r)))
-    nil
-    (let [pairs (zip l r)]
-      (pair-match? (first pairs) (rest pairs) {}))))
+(defn match?
+  ([l r] (match? l r {}))
+  ([l r binds]
+   (if (not (= (count l) (count r)))
+     nil
+     (let [pairs (zip l r)]
+       (pair-match? (first pairs) (rest pairs) binds)))))
 
 ;(defmacro if-match [pat seq then & else]
 ;  `(aif (match? ~pat ~seq)
