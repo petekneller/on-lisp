@@ -17,7 +17,7 @@
     (fact :painter ["reynolds" "joshua" "english"])
     (fact :dates ["hogarth" 1697 1772])
     (fact :dates ["canale" 1697 1768])
-    (fact :dates ["reynods" 1723 1792])))
+    (fact :dates ["reynolds" 1723 1792])))
 
 (m/fact "lookup"
         (set-test-data)
@@ -46,9 +46,9 @@
          (m/fact "and combinator"
                  (set-test-data)
                  (interpret-and [[:dates ['?x 1697 '?w]]] [{'?x "hogarth"} {'?x "canale"}]) => (m/just
-                                                                      [{'?w 1768 '?x "canale"}
-                                                                       {'?w 1772 '?x "hogarth"}]
-                                                                      :in-any-order)
+                                                                                                 [{'?w 1768 '?x "canale"}
+                                                                                                  {'?w 1772 '?x "hogarth"}]
+                                                                                                 :in-any-order)
                  (interpret-and [[:dates ['?x 1697 '?w]]
                                  [:painter ['?x '?y '?z]]] [{}]) => (m/just
                                                                       [{'?w 1768 '?z "venetian" '?y "antonio" '?x "canale"}
@@ -59,4 +59,24 @@
                                    [:painter ['?x '?y '?z]]]) => (m/just
                                                                    [{'?w 1768 '?z "venetian" '?y "antonio" '?x "canale"}
                                                                     {'?w 1772 '?z "english" '?y "william" '?x "hogarth"}]
-                                                                   :in-any-order)))
+                                                                   :in-any-order))
+         (m/fact "or combinator"
+                 (set-test-data)
+                 (interpret-query [:or
+                                   [:dates ['?x '?y 1772]]
+                                   [:dates ['?x '?y 1792]]]) => (m/just
+                                                                  [{'?x "reynolds" '?y 1723}
+                                                                   {'?x "hogarth" '?y 1697}]
+                                                                  :in-any-order))
+
+         (m/fact "not combinator"
+                 (set-test-data)
+                 (interpret-not [:painter ['?x '_ "english"]] [{'?x "reynolds"}]) => []
+                 (interpret-not [:painter ['?x '_ "venetian"]] [{'?x "reynolds"}]) => [{'?x "reynolds"}]
+                 (interpret-query [:and
+                                   [:painter ['?x '_ "english"]]
+                                   [:dates ['?x '?b '_]]
+                                   [:not
+                                    [:and
+                                     [:painter ['?x2 '_ "venetian"]]
+                                     [:dates ['?x2 '?b '_]]]]]) => [{'?x "reynolds" '?b 1723}]))

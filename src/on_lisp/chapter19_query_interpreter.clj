@@ -34,9 +34,19 @@
     (mapcat (fn [b] (interpret-query (first clauses) (vector b)))
             (interpret-and (rest clauses) binds))))
 
+(defn interpret-or [clauses binds]
+  (vec (mapcat #(interpret-query % binds) clauses)))
+
+(defn interpret-not [clause binds]
+  (if (empty? (interpret-query clause binds))
+    binds
+    []))
+
 (defn interpret-query
   ([form] (interpret-query form [{}]))
   ([form binds]
    (cond
+     (= :or (first form)) (interpret-or (rest form) binds)
      (= :and (first form)) (interpret-and (reverse (rest form)) binds)
+     (= :not (first form)) (interpret-not (second form) binds)
      :else (lookup (first form) (second form) binds))))
