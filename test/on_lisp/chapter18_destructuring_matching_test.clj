@@ -17,26 +17,26 @@
                ['?a]
                [1]) => {'?a 1}
              (match?
-               [1   2]
+               [1 2]
                ['?a '?b]) => {'?a 1 '?b 2}
              (match?
                ['_ '?a]
-               [1   2]) => {'?a 2})
+               [1 2]) => {'?a 2})
        (fact "symbols can be refer to previously established bindings"
              (match?
-               ['?a   '?a]
-               [1     1]) => {'?a 1}
+               ['?a '?a]
+               [1 1]) => {'?a 1}
              (match?
-               ['?a   '?a]
-               [1     2]) => nil
+               ['?a '?a]
+               [1 2]) => nil
              (match?
-               ['?a '?b   '?b]
-               [1   '?a   2]) => nil))
+               ['?a '?b '?b]
+               [1 '?a 2]) => nil))
 
-;(facts "if-match"
-;       (let [abab (fn [seq]
-;                    (if-match ['?x '?y '?x '?y] seq
-;                              ['?x '?y]
-;                              nil))]
-;         (fact (abab ["hi" "ho" "hi" "ho"]) => ["hi" "ho"])
-;         (fact (abab ["hi" "ho" "he" "hu"]) => nil)))
+(facts "if-match"
+       (let [abab (fn [seq]
+                    (if-match [?x ?y ?x ?y] seq
+                              [?x ?y]
+                              nil))]
+         (fact (abab ["hi" "ho" "hi" "ho"]) => ["hi" "ho"])
+         (fact (abab ["hi" "ho" "he" "hu"]) => nil)))

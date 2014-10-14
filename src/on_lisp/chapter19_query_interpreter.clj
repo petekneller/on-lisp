@@ -51,20 +51,6 @@
      (= :not (first form)) (interpret-not (second form) binds)
      :else (lookup (first form) (second form) binds))))
 
-(defn vars-in
-  ([query] (vars-in query []))
-  ([query vars]
-   (cond
-     (vector? query) (vec (set (mapcat #(vars-in % vars) query)))
-     (varsym? query) (conj vars query)
-     :else vars)))
-
-(defn quote-vars-in [query]
-  (cond
-    (vector? query) (vec (map #(quote-vars-in %) query))
-    (or (varsym? query) (ignoresym? query)) `(quote ~query)
-    :else query))
-
 (defmacro with-answer [query & body]
   (let [binds (gensym)]
   `(for [~binds (interpret-query ~(quote-vars-in query))]

@@ -7,7 +7,7 @@
   `(let [~'it ~test]
      (if ~'it
        ~then
-       ~else)))
+       ~@else)))
 
 
 (defmacro awhen [test & body]
