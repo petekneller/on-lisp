@@ -80,3 +80,12 @@
                                     [:and
                                      [:painter ['?x2 '_ "venetian"]]
                                      [:dates ['?x2 '?b '_]]]]]) => [{'?x "reynolds" '?b 1723}]))
+
+(m/fact "with-answer"
+        (set-test-data)
+        (with-answer [:painter ["hogarth" ?x ?y]]
+                     [?x ?y]) => (m/just [["william" "english"]])
+        (with-answer [:and
+                      [:painter [?x _ _]]
+                      [:dates [?x 1697 _]]]
+                     ?x) => ["canale" "hogarth"])

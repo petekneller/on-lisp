@@ -1,8 +1,11 @@
 (ns on-lisp.chapter18-destructuring-matching
   (:require [on-lisp.chapter14-anaphoric-macros :refer :all]))
 
-(defn- varsym? [x]
+(defn varsym? [x]
   (and (symbol? x) (.startsWith (name x) "?")))
+
+(defn ignoresym? [x]
+  (and (symbol? x) (= (name x) "_")))
 
 (defn- zip [& colls]
   (apply map vector colls))
